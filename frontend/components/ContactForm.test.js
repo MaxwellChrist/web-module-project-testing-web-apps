@@ -4,16 +4,28 @@ import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
 import ContactForm from './ContactForm';
 
-test('renders without errors', () => {
 
+
+test('renders without errors', () => {
+    render(<ContactForm />);
 });
 
 test('renders the contact form header', () => {
-
+    render(<ContactForm />);
+    const header = screen.getByText("Contact Form");
+    expect(header).toBeInTheDocument()
 });
 
 test('renders ONE error message if user enters less then 5 characters into firstname.', async () => {
-
+    render(<ContactForm />);
+    const testName = "Max";
+    const nameInput = screen.getByLabelText(/first name/i);
+    userEvent.type(nameInput, testName);
+    const firstNameError = screen.getByText(/error: firstName must have at least 5 characters/i)
+    const errorAmt = await screen.findAllByText(/error/i)
+    expect(nameInput).toHaveValue(testName);
+    expect(firstNameError).toBeInTheDocument();
+    expect(errorAmt).toHaveLength(1);
 });
 
 test('renders THREE error messages if user enters no values into any fields.', async () => {
